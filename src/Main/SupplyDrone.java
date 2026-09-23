@@ -6,6 +6,8 @@ public class SupplyDrone extends Drone{
         super(purpose, energy);
         this.details = details;
     }
+
+    @Override
     public void repair(Base target){
         if (details >= 1 && energy >= 8){
             this.details -= 1;
