@@ -13,8 +13,9 @@ public class SupplyDrone extends Drone{
             this.details -= 1;
             this.energy -= 8;
             int currentHP = target.getBaseHP();
-            if (100 - currentHP + 12 > 100){
+            if (currentHP + 12 >= 100){
                 target.setBaseHP(100);
+                System.out.println("Repair success! Base HP is 100");
             } else {
                 int newHP = 12 + currentHP;
                 target.setBaseHP(newHP);

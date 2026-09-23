@@ -13,11 +13,14 @@ public class CombatDrone extends Drone{
             this.energy -= 15;
             int currentHP = target.getBaseHP();
             int newHP = currentHP - this.strength;
+            target.setBaseHP(newHP);
             if (newHP > 0) {
                 System.out.println("Base got " + this.strength + " damage. Current base HP is " + newHP);
             } else {
                 System.out.println("Base got " + this.strength + " damage. Base has been destroyed.");
             }
+        } else {
+            System.out.println("Not enough energy for attack!");
         }
     }
 }

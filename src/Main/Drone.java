@@ -23,6 +23,7 @@ public class Drone {
         int currentEP = this.getEnergy();
         int newEP = energy + currentEP;
         this.setEnergy(newEP);
+        System.out.println("Drone charged to " + newEP + " EP");
     }
 
     public void attack(Base target){
