@@ -1,11 +1,13 @@
 package Main;
 
 public class Drone {
-    String purpose;
-    int energy;
-    int strength;
-    int details;
+    protected String purpose;
+    protected int energy;
+    protected int strength;
+    protected int details;
 
     public Drone(String purpose, int energy) {
+        this.purpose = purpose;
+        this.energy = energy;
     }
 }
