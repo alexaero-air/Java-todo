@@ -50,9 +50,7 @@ public class Main {
                         + ", " + bestPrice + " руб."
                 );
             }
-
-
-
+            System.out.println(); //для отступа
         }
 
     }
