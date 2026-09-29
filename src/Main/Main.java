@@ -1,57 +1,44 @@
 package Main;
-import java.util.ArrayList;
+
+
+import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
-        //Доступные способы доставки
-        ArrayList<Delivery> options = new ArrayList<>();
-        options.add(new PickupPoint());
-        options.add(new Courier());
+        Warehouse warehouse = new Warehouse("Ноутбуки", 29);
+        Scanner scanner = new Scanner(System.in);
 
-        //заказы, которые нужно обработать в массиве
-        Order [] orders = {
-                new Order(2,1000),
-                new Order(8,3500),
-                new Order(15,2000),
-                new Order(25,5000)
-        };
+        System.out.println("Товар: " + warehouse.getProductName());
+        System.out.println("На складе: " + warehouse.getStock());
 
-        for (int i=0; i < orders.length; i++){
-            Order order = orders[i];
-            // для нового заказа начинаем поиск заново
-            Delivery best = null;
-            double bestPrice = Double.MAX_VALUE;
-            System.out.println("Заказ № " + (i+1));
-            for (Delivery option : options){
-                //Сначала проверяем допустимый вес
-                if (!option.accepts(order.getWeight())){
-                    System.out.println(option.name() + ": недоступно, превышен вес");
-                    continue;
-                }
+        while (true){
+            System.out.print("Количество для выдачи или \"выход\": ");
 
-                //рассчитаем цену доступного способа
-
-                double price = option.price(order.getWeight(), order.getTotal());
-                System.out.println(option.name() + ": " + price + " руб.");
-
-                //запоминаем более доступный или более дешевый
-                if (best == null || price < bestPrice){
-                    best = option;
-                    bestPrice = price;
-                }
+            // Завершаем работу, если поток ввода закончился
+            if (!scanner.hasNextLine()){
+                break;
             }
 
-            //показывем результат
-            if (best == null){
-                System.out.println("Нет доступных способов доставки");
-            } else {
-                System.out.println(
-                        "Выбран: " + best.name()
-                        + ", " + bestPrice + " руб."
-                );
+            String input = scanner.nextLine().trim();
+            if (input.equalsIgnoreCase("выход")){
+                System.out.println("Выход...");
+                break;
             }
-            System.out.println(); //для отступа
+
+            try {
+                int quality = Integer.parseInt(input);
+                warehouse.issue(quality);
+                System.out.println("Выдано: " + quality + " шт.");
+            } catch (NumberFormatException e) {
+                System.out.println("Не удалось распознать количество. Введите целое число, например 5");
+            } catch (InsufficientStockException e) {
+                System.out.println(e.getMessage());
+            }
+
+            System.out.println("Остаток: " + warehouse.getStock() + " шт.");
+            System.out.println();
         }
-
+        scanner.close();
+        System.out.println("Работа завершена. Остаток: " + warehouse.getStock());
     }
 }
