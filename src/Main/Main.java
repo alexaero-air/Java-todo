@@ -1,60 +1,50 @@
 package Main;
 
+import java.io.IOException;
+import java.nio.file.Path;
+import java.util.Scanner;
+
 public class Main {
     public static void main(String[] args) {
-        DeliveryRequest[] requests = {
-            new DeliveryRequest("Экспресс",340,500),
-            new DeliveryRequest("Город",300,350),
-            new DeliveryRequest("Посылка",320,420)
-        };
+        Path path = Path.of("requests.txt");
+        RequestJournal journal = new RequestJournal(path);
+        System.out.println("Журнал находится: " + path.toAbsolutePath());
 
-        Thread[] threads = new Thread[requests.length];
+        try(Scanner scanner = new Scanner(System.in)) {
+            while (true){
+                System.out.println();
+                System.out.println("1 - Добавить заявку");
+                System.out.println("2 - Просмотреть журнал");
+                System.out.println("3 - Выход");
+                System.out.print("Выберите действие: ");
 
-        // Сначала запускаем все запросы
-
-        for (int i=0; i<requests.length; i++){
-            threads[i] = new Thread(requests[i]);
-            threads[i].start();
-        }
-
-        // только после запуска всех запросов ждем их завершения
-        try {
-            for (Thread thread : threads){
-                thread.join();
-            }
-        } catch (InterruptedException e) {
-            // Если прервалось ожидание в main, отменяем все запросы
-            for (Thread thread : threads){
-                thread.interrupt();
-            }
-            Thread.currentThread().interrupt();
-            System.out.println("Ожидание ответов прервано. Подбор доставки отменен");
-            return;
-        }
-
-        System.out.println();
-        System.out.println("Все запросы завершены");
-        DeliveryRequest best = null;
-
-        for (DeliveryRequest request : requests){
-            // Пропускаем службы от которых не получили ответ
-
-            if (!request.isSuccessful()){
-                System.out.println("Служба " + request.getServiceName() + " не ответила на запрос");
-                continue;
-            }
-
-            // Запомним первое предложение и самое дешевое
-
-            if (best == null || request.getPrice() < best.getPrice()){
-                best = request;
+                String choice = scanner.nextLine().strip();
+                try {
+                    switch (choice){
+                        case "1":
+                            addRequest(scanner, journal);
+                            break;
+                        case "2":
+                            showJournal();
+                            break;
+                        case "3":
+                            break;
+                        default:
+                            System.out.println("Неверный выбор: " + choice + ". Нажмите 1, 2 или 3");
+                    }
+                } catch (IllegalArgumentException e){
+                    System.out.println(e.getMessage());
+                } catch (IOException e) {
+                    System.out.println("Не удалось выполнить операцию");
+                    System.out.println("Проверьте путь к файлу");
+                }
             }
         }
-        if (best == null){
-            System.out.println("Подобрать доставку не удалось: нет предложений.");
-        } else {
-            System.out.println("Самая дешевая доставка: "
-                    + best.getServiceName() + ", " + best.getPrice() + " руб.");
-        }
+    }
+    private static void addRequest(){
+
+    }
+    private static void showJournal(){
+
     }
 }
