@@ -3,9 +3,9 @@ package Main;
 public class Main {
     public static void main(String[] args) {
         DeliveryRequest[] requests = {
-            new DeliveryRequest("Экспресс",2000,500),
-            new DeliveryRequest("Город",5000,350),
-            new DeliveryRequest("Посылка",4000,420)
+            new DeliveryRequest("Экспресс",340,500),
+            new DeliveryRequest("Город",300,350),
+            new DeliveryRequest("Посылка",320,420)
         };
 
         Thread[] threads = new Thread[requests.length];
@@ -35,10 +35,12 @@ public class Main {
         System.out.println();
         System.out.println("Все запросы завершены");
         DeliveryRequest best = null;
+
         for (DeliveryRequest request : requests){
             // Пропускаем службы от которых не получили ответ
 
             if (!request.isSuccessful()){
+                System.out.println("Служба " + request.getServiceName() + " не ответила на запрос");
                 continue;
             }
 
