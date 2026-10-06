@@ -1,30 +1,21 @@
 package Main;
 
+import com.sun.net.httpserver.Request;
+
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class Main {
     public static void main(String[] args) {
-        List<String> names = new ArrayList<>();
-        names.add("Анна");
-        names.add("Борис");
-        names.add("Анна");
-        names.set(1,"Николай");
-//        names.remove("Анна");
-//        names.remove("Анна");
-//        names.remove(0);
+        Set<String> clients = new HashSet<>();
+        System.out.println(clients.add("C101"));
+        System.out.println(clients.add("C102"));
+        System.out.println(clients.add("C101"));
+        System.out.println(clients.add("C103"));
 
-        System.out.println(names);
-        System.out.println(names.get(0));
-        System.out.println(names.size());
-
-        for (String name : names){
-            System.out.println(name);
-        }
-        if (names.contains("Борис")){
-            System.out.println("Борис есть в списке");
-        } else {
-            System.out.println("Бориса нет в списке");
-        }
+        System.out.println(clients.size());
+        System.out.println(clients);
     }
 }
