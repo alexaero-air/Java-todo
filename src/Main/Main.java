@@ -1,21 +1,15 @@
 package Main;
 
-import com.sun.net.httpserver.Request;
-
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
 public class Main {
     public static void main(String[] args) {
-        Set<String> clients = new HashSet<>();
-        System.out.println(clients.add("C101"));
-        System.out.println(clients.add("C102"));
-        System.out.println(clients.add("C101"));
-        System.out.println(clients.add("C103"));
+        RepairService service = new RepairService();
 
-        System.out.println(clients.size());
-        System.out.println(clients);
+        PriceRule standard = hours -> 500 + hours * 600;
+        PriceRule express = hours -> 500 + hours * 900;
+
+        System.out.println(
+                "Обычный: " +  service.quote(2, standard)
+                + "\nЭкспресс: " + service.quote(2,express)
+                );
     }
 }
