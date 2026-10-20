@@ -4,17 +4,19 @@ import javax.swing.*;
 import java.nio.file.Path;
 
 public class Main {
-    public static void main(String[] args) {
+    public static void main(String[] args){
+
         Path dataFile = Path.of(
                 System.getProperty("user.home"),
-                ".todoapp-tasks.txt"
-                );
+                "Downloads",
+                "todolist.txt"
+        );
 
-        TaskStorage storage new TaskStorage()
+        TaskStorage storage = new TaskStorage(dataFile);
 
-        SwingUtilities.invokeLater(() -> {
-            TodoFrame window = new TodoFrame();
-
-        });
+        SwingUtilities.invokeLater(() ->{
+            ToDoFrame window = new ToDoFrame(storage);
+            window.setVisible(true);
+        }); 
     }
 }
