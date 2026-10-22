@@ -48,7 +48,7 @@ public class ToDoFrame extends JFrame {
         JScrollPane commentScroll = new JScrollPane(commentArea);
         commentScroll.setBorder(BorderFactory.createTitledBorder(
                 "Комментарий выбраной задачи (сохранение кнопкой)"
-        ));
+        )); //
 
     }
 
