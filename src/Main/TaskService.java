@@ -1,10 +1,13 @@
 package Main;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.Reader;
+import java.io.Writer;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.time.DateTimeException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -49,7 +52,7 @@ public class TaskService {
 
     public void completeTask(Task task) throws IOException{
         ensureLoaded();
-        requireTask();
+        requireTask(task);
 
         if (task.isCompleted()){
             return;
@@ -156,7 +159,75 @@ public class TaskService {
         loaded = true;
     }
 
-    private void saveTasks(){}
+    private void saveTasks() throws IOException{
+        ensureLoaded();
+
+        Properties data = new Properties();
+        data.setProperty(
+                "task.count",
+                String.valueOf(tasks.size())
+        );
+
+        for (int i = 0; i < tasks.size(); i++){
+            Task task = tasks.get(i);
+            String prefix = "task." + i + ".";
+
+            data.setProperty(
+                    prefix + "title",
+                    task.getTitle()
+            );
+
+            data.setProperty(
+                    prefix + "comment",
+                    task.getComment()
+            );
+
+            data.setProperty(
+                    prefix + "createdAt",
+                    task.getCreateAt().toString()
+            );
+
+            data.setProperty(
+                    prefix + "completed",
+                    String.valueOf(task.isCompleted())
+            );
+
+            data.setProperty(
+                    prefix + "completedAt",
+                    task.getCompleteAt() == null
+                    ? "" : task.getCompleteAt().toString()
+            );
+        }
+
+        Files.createDirectories(storageFile.getParent());
+
+        Path temporary = Files.createTempFile(
+                storageFile.getParent(),
+                "tasks-",
+                ".tmp"
+        );
+
+        try {
+            try (Writer writer = Files.newBufferedWriter(
+                    temporary, StandardCharsets.UTF_8)){
+                data.store(writer, "TodoApp");
+            }
+
+            Files.move(
+                    temporary,
+                    storageFile,
+                    StandardCopyOption.REPLACE_EXISTING,
+                    StandardCopyOption.ATOMIC_MOVE
+            );
+
+        } finally {
+            try {
+                Files.deleteIfExists(temporary);
+            } catch (IOException ignored){
+
+            }
+        }
+    }
 
     private String required(Properties data, String key){
         String value = data.getProperty(key);
