@@ -27,3 +27,23 @@ bin/
 
 ### Mac OS ###
 .DS_Store
+
+# Локальные настройки IntelliJ IDEA
+.idea/
+*.iml
+
+# Результаты компиляции
+out/
+*.class
+
+# Пользовательские данные
+
+task.properties
+tasks-*.tmp
+
+# Журналы
+*.log
+
+# Служеюные файлы
+.DS Store
+Thumbs.db
